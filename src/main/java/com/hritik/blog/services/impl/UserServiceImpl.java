@@ -47,9 +47,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserDto> getAllUsers() {
+		if(!this.userRepo.findAll().isEmpty()){
 		List<User> listOfAllUsers = this.userRepo.findAll();
 		List<UserDto> listOfAllUserDto = listOfAllUsers.stream().map(user -> this.userToDto(user)).collect(Collectors.toList());
 		return listOfAllUserDto;
+		}else {
+			throw new ResourceNotFoundException("No user is present in the database.");
+		}
 	}
 
 	@Override

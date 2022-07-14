@@ -12,6 +12,7 @@ import javax.validation.constraints.*;
 public class UserDto {
 
     private int id;
+
     @NotEmpty
     @Size(min = 3, message = "user name must be minimum of 3 Characters")
     private String name;
