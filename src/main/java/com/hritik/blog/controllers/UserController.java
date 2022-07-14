@@ -33,9 +33,7 @@ public class UserController {
 
     //GET
     @GetMapping("/")
-    public ResponseEntity<List<UserDto>> getAllUsers(){
-        return ResponseEntity.ok(this.userService.getAllUsers());
-    }
+    public ResponseEntity<List<UserDto>> getAllUsers(){return ResponseEntity.ok(this.userService.getAllUsers());}
 
     //PUT
     @PutMapping("/{userId}")
