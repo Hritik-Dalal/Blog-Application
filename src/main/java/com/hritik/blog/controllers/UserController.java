@@ -27,10 +27,11 @@ public class UserController {
 
     //GET
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> getSingleUser(@PathVariable Integer userId){
-        return ResponseEntity.ok(this.userService.getUserById(userId));
+    public ResponseEntity<UserDto> getSingleUser(@PathVariable("userId") Integer uId){
+        return ResponseEntity.ok(this.userService.getUserById(uId));
     }
 
+    //GET
     @GetMapping("/")
     public ResponseEntity<List<UserDto>> getAllUsers(){
         return ResponseEntity.ok(this.userService.getAllUsers());
