@@ -67,6 +67,7 @@ public class PostServiceImpl implements PostService {
         Post oldPost = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "postId", postId));
         oldPost.setPostTitle(postDto.getPostTitle());
         oldPost.setPostContent(postDto.getPostContent());
+        oldPost.setPostImageName(postDto.getPostImageName());
         Post updatedPost = this.postRepo.save(oldPost);
         return this.postToPostDto(updatedPost);
     }
@@ -79,12 +80,28 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> getPostsByUser(Integer userId) {
-        return null;
+        User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
+        if(!this.postRepo.findByUser(user).isEmpty()){
+        List<Post> listOfAllPostsWithSameUser = this.postRepo.findByUser(user);
+        List<PostDto> listOfAllPostDtosWithSameUser = listOfAllPostsWithSameUser.stream().map(post -> this.postToPostDto(post)).collect(Collectors.toList());
+        return listOfAllPostDtosWithSameUser;
+        }
+        else {
+            throw new ResourceNotFoundException(String.format("No posts found with user name : %s, having Id : %s", user.getName(), user.getUserId()));
+        }
     }
 
     @Override
     public List<PostDto> getPostsByCategory(Integer categoryId) {
-        return null;
+        Category category = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
+        if(!this.postRepo.findByCategory(category).isEmpty()){
+        List<Post> listOfAllPostsWithSameCategory = this.postRepo.findByCategory(category);
+        List<PostDto> listOfAllPostsDtoWithSameCategory = listOfAllPostsWithSameCategory.stream().map(post -> this.postToPostDto(post)).collect(Collectors.toList());
+        return listOfAllPostsDtoWithSameCategory;
+        }
+        else {
+            throw new ResourceNotFoundException(String.format("No posts found with category name : %s, having Id : %s", category.getCategoryTitle(), category.getCategoryId()));
+        }
     }
 
     @Override
