@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @RestController
@@ -39,8 +41,10 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts(){
-        List<PostDto> listOfAllPostDtos = this.postService.getAllPosts();
+    public ResponseEntity<List<PostDto>> getAllPosts(
+            @RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
+            @RequestParam(value="pageSize", defaultValue = "2", required = false) Integer pageSize){
+        List<PostDto> listOfAllPostDtos = this.postService.getAllPosts(pageNumber, pageSize);
         return new ResponseEntity<>(listOfAllPostDtos, HttpStatus.FOUND);
     }
 

@@ -11,6 +11,9 @@ import com.hritik.blog.repositories.UserRepo;
 import com.hritik.blog.services.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
@@ -52,9 +55,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        if(!this.postRepo.findAll().isEmpty()){
-            List<Post> listOfAllPosts = this.postRepo.findAll();
+    public List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize) {
+
+        Pageable p = PageRequest.of(pageNumber, pageSize);
+
+        if(!this.postRepo.findAll(p).isEmpty()){
+            Page<Post> pagePost = this.postRepo.findAll(p);
+            List<Post> listOfAllPosts = pagePost.getContent();
             List<PostDto> listOfAllPostDto = listOfAllPosts.stream().map(post -> this.postToPostDto(post)).collect(Collectors.toList());
             return listOfAllPostDto;
         }else {
