@@ -126,7 +126,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> searchPosts(String keyword) {
-        return null;
+        List<Post> listOfPosts = this.postRepo.findByPostTitleContaining(keyword);
+        if(!listOfPosts.isEmpty()){
+        List<PostDto> listOfPostDtos = listOfPosts.stream().map(post -> this.postToPostDto(post)).collect(Collectors.toList());
+        return listOfPostDtos;
+        }else {
+            throw new ResourceNotFoundException(String.format("No posts found containing : %s",keyword));
+        }
     }
 
     public Post postDtoToPost(PostDto postDto){
