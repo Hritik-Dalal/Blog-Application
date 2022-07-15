@@ -5,6 +5,7 @@ import com.hritik.blog.entities.Post;
 import com.hritik.blog.entities.User;
 import com.hritik.blog.exception.ResourceNotFoundException;
 import com.hritik.blog.payloads.PostDto;
+import com.hritik.blog.payloads.PostResponse;
 import com.hritik.blog.repositories.CategoryRepo;
 import com.hritik.blog.repositories.PostRepo;
 import com.hritik.blog.repositories.UserRepo;
@@ -55,15 +56,24 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize) {
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
 
         Pageable p = PageRequest.of(pageNumber, pageSize);
 
         if(!this.postRepo.findAll(p).isEmpty()){
-            Page<Post> pagePost = this.postRepo.findAll(p);
-            List<Post> listOfAllPosts = pagePost.getContent();
+            Page<Post> pageContaingLimitedPosts = this.postRepo.findAll(p);
+            List<Post> listOfAllPosts = pageContaingLimitedPosts.getContent();
             List<PostDto> listOfAllPostDto = listOfAllPosts.stream().map(post -> this.postToPostDto(post)).collect(Collectors.toList());
-            return listOfAllPostDto;
+
+            PostResponse postResponse = new PostResponse();
+            postResponse.setContent(listOfAllPostDto);
+            postResponse.setPageNumber(pageContaingLimitedPosts.getNumber());
+            postResponse.setPageSize(pageContaingLimitedPosts.getSize());
+            postResponse.setTotalElements(pageContaingLimitedPosts.getTotalElements());
+            postResponse.setTotalPages(pageContaingLimitedPosts.getTotalPages());
+            postResponse.setLastPage(pageContaingLimitedPosts.isLast());
+
+            return postResponse;
         }else {
             throw new ResourceNotFoundException("No post found in the database!");
         }

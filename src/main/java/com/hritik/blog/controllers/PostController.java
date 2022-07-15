@@ -2,6 +2,7 @@ package com.hritik.blog.controllers;
 
 import com.hritik.blog.payloads.ApiResponse;
 import com.hritik.blog.payloads.PostDto;
+import com.hritik.blog.payloads.PostResponse;
 import com.hritik.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,13 +42,13 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts(
+    public ResponseEntity<PostResponse> getAllPosts(
 
             //Page number starts with 0
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
             @RequestParam(value="pageSize", defaultValue = "2", required = false) Integer pageSize){
-        List<PostDto> listOfAllPostDtos = this.postService.getAllPosts(pageNumber, pageSize);
-        return new ResponseEntity<>(listOfAllPostDtos, HttpStatus.FOUND);
+        PostResponse postResponse = this.postService.getAllPosts(pageNumber, pageSize);
+        return new ResponseEntity<>(postResponse, HttpStatus.FOUND);
     }
 
     @GetMapping("/posts/{postId}")
