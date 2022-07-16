@@ -1,9 +1,11 @@
 package com.hritik.blog.payloads;
 
+import com.hritik.blog.entities.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Date;
+import java.util.Set;
 
 @NoArgsConstructor
 @Setter
@@ -20,5 +22,7 @@ public class PostDto {
 
     private CategoryDto category;
     private UserDto user;
+
+    private Set<CommentDto> comments;
 
 }
