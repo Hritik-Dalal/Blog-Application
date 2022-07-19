@@ -22,6 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
+    
+    //To generate token
+    // Username : dalalhritik123@gmail.com
+    // password : Hritik@123
 
     @Autowired
     private JwtTokenHelper jwtTokenHelper;

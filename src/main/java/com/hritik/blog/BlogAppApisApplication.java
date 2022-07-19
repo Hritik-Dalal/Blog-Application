@@ -15,6 +15,9 @@ import java.util.List;
 
 @SpringBootApplication
 public class BlogAppApisApplication implements CommandLineRunner {
+	//To generate token
+	// Username : dalalhritik123@gmail.com
+	// password : Hritik@123
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -38,11 +41,11 @@ public class BlogAppApisApplication implements CommandLineRunner {
 		try{
 			Role role1 = new Role();
 			role1.setId(AppConstants.ADMIN_USER);
-			role1.setName("ADMIN_USER");
+			role1.setName("ROLE_ADMIN");
 
 			Role role2 = new Role();
 			role2.setId(AppConstants.NORMAL_USER);
-			role2.setName("NORMAL_USER");
+			role2.setName("ROLE_NORMAL");
 
 			List<Role> roles = List.of(role1, role2);
 			List<Role> result = this.roleRepo.saveAll(roles);
