@@ -3,13 +3,17 @@ package com.hritik.blog.services.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.hritik.blog.config.AppConstants;
+import com.hritik.blog.entities.Role;
 import com.hritik.blog.entities.User;
 import com.hritik.blog.exception.ResourceNotFoundException;
 import com.hritik.blog.payloads.UserDto;
+import com.hritik.blog.repositories.RoleRepo;
 import com.hritik.blog.repositories.UserRepo;
 import com.hritik.blog.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +24,24 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private RoleRepo roleRepo;
+
+
+
+	@Override
+	public UserDto registerNewUser(UserDto userDto) {
+		User user = this.dtoToUser(userDto);
+		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+		Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+		user.getRoles().add(role);
+		User registeredNewUser = this.userRepo.save(user);
+		return this.userToDto(registeredNewUser);
+	}
 
 	@Override
 	public UserDto createUser(UserDto userDto) {
