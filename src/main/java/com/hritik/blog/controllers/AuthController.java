@@ -1,5 +1,6 @@
 package com.hritik.blog.controllers;
 
+import com.hritik.blog.exception.ApiException;
 import com.hritik.blog.payloads.JwtAuthRequest;
 import com.hritik.blog.payloads.JwtAuthResponse;
 import com.hritik.blog.security.JwtTokenHelper;
@@ -46,7 +47,7 @@ public class AuthController {
             this.authenticationManager.authenticate(authenticationToken);
         }catch (BadCredentialsException e){
             System.out.println("Invalid Details!");
-            throw new Exception("Invalid username or password");
+            throw new ApiException("Invalid Password!!");
         }
     }
 }
